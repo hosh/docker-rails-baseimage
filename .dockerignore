@@ -1,0 +1,3 @@
+.cache/bundle/ruby/*/cache
+.cache/bundle/ruby/2.2.0/bundler/gems/*/.git
+.cache/bundle/ruby/*/extensions/*/*/*/gem_make.out

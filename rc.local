@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# In Phusion baseimage, this file is run last for myinit
+# This script checks RAILS_APP environmental variable and
+# enables that service in runit. In this way, this single
+# container will be able to run web, sidekiq, or roundhouse
+
+if [ -z "${RAILS_APP}" ]; then
+  echo "Must pass RAILS_APP environmental variable"
+  echo "Options: none, web, sidekiq, roundhouse, or dev"
+  # Exit if RAILS_APP is not passed. This is OK for production
+  # To convert this to an image usable for dev work, probably
+  # want to take this out so you can run commands with the code
+  # without having to bring up a server.
+  exit 1
+fi
+
+if [ "${RAILS_ENV}" = "development" ]; then
+    echo "Setting up for dev mode"
+    APP_HOME=/home/app
+
+    usermod -u ${DEV_UID} app
+    groupmod -g ${DEV_GID} app
+    echo `setuser app id`
+
+    # If we create this and then chown it to app,
+    # Docker reports permission denied. Probably a
+    # bug in the filesystem
+    rm -fr ${APP_HOME}/.ssh
+    setuser app mkdir ${APP_HOME}/.ssh
+    setuser app chmod 700 /home/app/.ssh
+    setuser app touch ${APP_HOME}/.ssh/known_hosts
+    setuser app chmod 600 ${APP_HOME}/.ssh/known_hosts
+    setuser app ssh-keyscan github.com > ${APP_HOME}/.ssh/known_hosts
+
+    (cd ${APP_ROOT}; setuser app bundle install)
+fi
+
+# If RAILS_APP is set to none, then do not set up runservice
+if [ "${RAILS_APP}" = "none" ]; then
+    echo "Skipping runit"
+    exit 0
+fi
+
+if [ "${RAILS_APP}" = "web" ]; then
+    echo "Enabling Passenger Phusion, skipping runit"
+    rm /etc/service/nginx/down
+    exit 0
+fi
+
+# Forgo validating RAILS_APP
+mkdir -p /etc/service/${RAILS_APP}
+ln -ns /home/app/srv/${RAILS_APP}.runit /etc/service/${RAILS_APP}/run

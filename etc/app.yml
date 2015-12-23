@@ -1,0 +1,26 @@
+# config/application.yml
+defaults: &defaults
+  app_name: 'Alt Text'
+  app_prefix: 'alt-text'
+  app_plans:
+    free: 'alttextfree'
+    pro: 'alttextpro'
+  alt_text_template: |
+    {{product_title}} - {{shop_name}}
+  webhook_url: 'http://alt-text.shopapps.io/webhooks'
+  shopify_api_key: <%= SHOPIFY_API_KEY %>
+  shopify_secret:  <%= SHOPIFY_SECRET %>
+
+development:
+  <<: *defaults
+  webhook_url: <%= WEBHOOK_URL %>
+
+test:
+  <<: *defaults
+  webhook_url: 'http://alt-text.shopapps.io/webhooks'
+
+production:
+  <<: *defaults
+  shopify_api_key: 'ignored'
+  shopify_secret: 'ignored'
+

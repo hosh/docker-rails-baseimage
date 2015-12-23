@@ -1,0 +1,11 @@
+#!/bin/sh
+
+MAX_THREADS=${MAX_THREADS:-30}
+export MAX_THREADS
+
+if [ -z ${DEBUG} ]; then
+  echo `env | sort`
+fi
+
+cd ${APP_ROOT}
+exec bundle exec roundhouse -C config/roundhouse.yml -c ${MAX_THREADS} -e ${RAILS_ENV}

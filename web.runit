@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ -z ${DEBUG} ]; then
+  echo `env | sort`
+fi
+
+cd ${APP_ROOT}
+exec bundle exec unicorn_rails -p 80 -c config/unicorn.rb -e ${RAILS_ENV}

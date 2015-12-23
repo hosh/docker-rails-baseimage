@@ -1,0 +1,9 @@
+#!/bin/bash
+
+APP=${1}
+echo "Sending USR1 to ${APP}"
+sv 1 ${APP}
+sleep 10
+
+echo "Shutting down ${APP}"
+sv -v -w 10 down ${APP}

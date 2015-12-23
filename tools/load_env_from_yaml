@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+yaml_file = ARGV[0]
+if yaml_file.nil? || yaml_file.empty?
+  puts "#{$0} <yaml file>"
+  exit(1)
+end
+
+unless File.file?(yaml_file)
+  puts "#{$0}: file #{yaml_file} not found"
+  exit(1)
+end
+
+require 'yaml'
+
+envvars = YAML.load_file(yaml_file)
+
+exit(0) unless envvars && envvars.is_a?(Hash)
+
+envvars.each do |key, value|
+  File.write("/etc/container_environment/#{key}", value, nil, mode: 'w')
+end

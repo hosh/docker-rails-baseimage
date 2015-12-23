@@ -1,0 +1,11 @@
+---
+:concurrency: 5
+:pidfile: tmp/pids/sidekiq.pid
+# Log to stdout for docker
+#:logfile: log/sidekiq.log
+production:
+  :concurrency: 25
+:queues:
+  - ["interactive", 6]
+  - ["general", 3]
+  - ["default", 1]
