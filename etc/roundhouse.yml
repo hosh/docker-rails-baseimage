@@ -1,7 +1,0 @@
----
-:concurrency: 5
-:pidfile: tmp/pids/roundhouse.pid
-# Log to stdout for docker
-#:logfile: log/roundhouse.log
-production:
-  :concurrency: 30

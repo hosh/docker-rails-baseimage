@@ -1,0 +1,2 @@
+check process <%= ENV['RAILS_APP'] %> with pidfile /etc/service/<%= ENV['RAILS_APP'] %>/supervise/pid
+  if totalmemory > <%= ENV['MONIT_WORKER_MEM_LIMIT'] %> MB for 2 cycles then exec "/home/app/tools/restart-workers <%= ENV['RAILS_APP'] %>"

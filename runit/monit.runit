@@ -1,0 +1,11 @@
+#!/bin/sh
+
+MONIT_INTERVAL=${MONIT_INTERVAL:-120}
+export MONIT_INTERVAL
+
+if [ -z ${DEBUG} ]; then
+  echo `env | sort`
+fi
+
+cd ${APP_ROOT}
+monit -d ${MONIT_INTERVAL} -Ic /etc/monit/monitrc

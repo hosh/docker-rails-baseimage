@@ -1,7 +1,7 @@
 # Makefile for creating container file
 # Override these with environmental variables
 BRANCH?=master
-VERSION?=0.1.0
+VERSION?=0.2.0
 
 ### Do not override below
 

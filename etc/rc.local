@@ -51,3 +51,11 @@ fi
 # Forgo validating RAILS_APP
 mkdir -p /etc/service/${RAILS_APP}
 ln -ns /home/app/srv/${RAILS_APP}.runit /etc/service/${RAILS_APP}/run
+
+# Startup monit if MONIT_WORKER_MEM_LIMIT is defined
+if [ -n "${MONIT_WORKER_MEM_LIMIT}" ]; then
+	/home/app/tools/render-monit-worker
+	mkdir -p /etc/service/monit
+	ln -ns /home/app/srv/monit.runit /etc/service/monit/run
+fi
+
